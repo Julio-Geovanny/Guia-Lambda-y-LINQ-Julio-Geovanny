@@ -26,5 +26,19 @@ namespace GuiaLambdaLinq
                 .Where(p => p.Precio > precioMinimo)    //filtrar productos con precio mayor al minimo especificado
                 .OrderBy(p => p.Precio);    //ordena los productos de menor a mayor precio
         }
+
+        public void ActualizarPrecio(string nombre, double nuevoPrecio)
+        {
+            var producto = productos.FirstOrDefault(p => p.Nombre.Equals(nombre, StringComparison.OrdinalIgnoreCase));
+            if (producto != null)
+            {
+                producto.Precio = nuevoPrecio;
+                Console.WriteLine($"El precio del producto '{nombre}' ha sido actualizado a {nuevoPrecio}.");
+            }
+            else
+            {
+                Console.WriteLine($"Producto '{nombre}' no encontrado.");
+            }
+        }
     }
 }
