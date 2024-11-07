@@ -22,7 +22,5 @@ namespace GuiaLambdaLinq
             Console.WriteLine($"Producto: {Nombre}, Precio: {Precio}");
         }
 
-
-
     }
 }
