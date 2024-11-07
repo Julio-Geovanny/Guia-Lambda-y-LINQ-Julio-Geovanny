@@ -47,12 +47,24 @@ namespace GuiaLambdaLinq
             if (producto != null)
             {
                 productos.Remove(producto);
-                Console.WriteLine($"El producto '{nombre}' ha sido eliminado.");
+                Console.WriteLine($"El producto '{nombre}' ha sido eliminado."); 
             }
             else
             {
                 Console.WriteLine($"Producto '{nombre}' no encontrado.");
             }
+        }
+
+        public void ContarProductosPorRango()
+        {
+            var conteo = new
+            {
+                MenoresA100 = productos.Count(p => p.Precio < 100),
+                Entre100y500 = productos.Count(p => p.Precio >= 100 && p.Precio <= 500),
+                MayoresA500 = productos.Count(p => p.Precio > 500)
+            };
+
+            Console.WriteLine($"Conteo de productos:\nMenores a 100: {conteo.MenoresA100}\nEntre 100 y 500: {conteo.Entre100y500}\nMayores a 500: {conteo.MayoresA500}");
         }
     }
 }
