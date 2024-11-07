@@ -66,5 +66,23 @@ namespace GuiaLambdaLinq
 
             Console.WriteLine($"Conteo de productos:\nMenores a 100: {conteo.MenoresA100}\nEntre 100 y 500: {conteo.Entre100y500}\nMayores a 500: {conteo.MayoresA500}");
         }
+
+        public void GenerarReporte()
+        {
+            int totalProductos = productos.Count;
+            double precioPromedio = totalProductos > 0 ? productos.Average(p => p.Precio) : 0;
+
+            var productoMasCaro = productos.OrderByDescending(p => p.Precio).FirstOrDefault();
+            var productoMasBarato = productos.OrderBy(p => p.Precio).FirstOrDefault();
+
+            Console.WriteLine($"Total de productos: {totalProductos}");
+            Console.WriteLine($"Precio promedio: {precioPromedio}");
+
+            if (productoMasCaro != null)
+                Console.WriteLine($"Producto más caro: {productoMasCaro.Nombre}, Precio: {productoMasCaro.Precio}");
+
+            if (productoMasBarato != null)
+                Console.WriteLine($"Producto más barato: {productoMasBarato.Nombre}, Precio: {productoMasBarato.Precio}");
+        }
     }
 }
