@@ -40,5 +40,19 @@ namespace GuiaLambdaLinq
                 Console.WriteLine($"Producto '{nombre}' no encontrado.");
             }
         }
+
+        public void EliminarProducto(string nombre)
+        {
+            var producto = productos.FirstOrDefault(p => p.Nombre.Equals(nombre, StringComparison.OrdinalIgnoreCase));
+            if (producto != null)
+            {
+                productos.Remove(producto);
+                Console.WriteLine($"El producto '{nombre}' ha sido eliminado.");
+            }
+            else
+            {
+                Console.WriteLine($"Producto '{nombre}' no encontrado.");
+            }
+        }
     }
 }
