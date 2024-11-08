@@ -7,29 +7,26 @@ namespace GuiaLambdaLinq
         public static void Main(string[] args)
         {
             Inventario inventario = new Inventario();
-            Console.WriteLine("Bienvenidos al sistema de gestion de inventario");
+            Console.WriteLine("Bienvenidos al sistema de gestión de inventario");
 
             // ingreso de productos por el usuario
-            Console.WriteLine("Cuantos productos desea ingresar");
-            int cantidad = int.Parse(Console.ReadLine());
+            Console.WriteLine("¿Cuántos productos desea ingresar?");
+            int cantidad = LeerCantidadProductos();
 
             // se ocupa el ciclo for para pedir exactamente la cantidad de productos que desea ingresar el usuario
             for (int i = 0; i < cantidad; i++)
             {
                 Console.WriteLine($"\nProducto {i + 1}: ");
-                Console.WriteLine("Nombre: ");
-                string nombre = Console.ReadLine();
-
-                Console.WriteLine("Precio: ");
-                double precio = double.Parse(Console.ReadLine());
+                string nombre = LeerNombre();
+                double precio = LeerPrecio();
 
                 Producto producto = new Producto(nombre, precio);
                 inventario.AgregarProducto(producto);
             }
 
-            // ingresar el precio minimo para el filtro
-            Console.WriteLine("\nIngrese el precio minimo para filtrar los productos: ");
-            double precioMinimo = double.Parse(Console.ReadLine());
+            // ingresar el precio mínimo para el filtro
+            Console.WriteLine("\nIngrese el precio mínimo para filtrar los productos: ");
+            double precioMinimo = LeerPrecio();
 
             // filtrar y mostrar producto
             var productosFiltrados = inventario.FiltrarYOrdenarProductos(precioMinimo);
@@ -41,8 +38,7 @@ namespace GuiaLambdaLinq
             }
 
             // Actualizar precio de un producto
-            Console.WriteLine("\n¿Desea actualizar el precio de un producto? (s/n)");
-            if (Console.ReadLine().ToLower() == "s")
+            if (LeerConfirmacion("\n¿Desea actualizar el precio de un producto? (s/n)"))
             {
                 string nombreProducto = LeerNombre();
                 double nuevoPrecio = LeerPrecio();
@@ -50,8 +46,7 @@ namespace GuiaLambdaLinq
             }
 
             // Eliminar un producto
-            Console.WriteLine("\n¿Desea eliminar un producto? (s/n)");
-            if (Console.ReadLine().ToLower() == "s")
+            if (LeerConfirmacion("\n¿Desea eliminar un producto? (s/n)"))
             {
                 string nombreProducto = LeerNombre();
                 inventario.EliminarProducto(nombreProducto);
@@ -73,7 +68,7 @@ namespace GuiaLambdaLinq
                 if (double.TryParse(Console.ReadLine(), out precio) && precio > 0)
                     return precio;
                 else
-                    Console.WriteLine("Por favor, ingrese un precio válido (número positivo).");
+                    Console.WriteLine("¡Ups! Por favor, ingrese un precio válido (número positivo).");
             }
         }
 
@@ -87,7 +82,33 @@ namespace GuiaLambdaLinq
                 if (!string.IsNullOrWhiteSpace(nombre))
                     return nombre;
                 else
-                    Console.WriteLine("El nombre no puede estar vacío. Inténtelo nuevamente.");
+                    Console.WriteLine("¡Atención! El nombre no puede estar vacío. Inténtelo nuevamente.");
+            }
+        }
+
+        private static int LeerCantidadProductos()
+        {
+            int cantidad;
+            while (true)
+            {
+                if (int.TryParse(Console.ReadLine(), out cantidad) && cantidad > 0)
+                    return cantidad;
+                else
+                    Console.WriteLine("¡Error! Debe ingresar un número entero positivo para la cantidad de productos.");
+            }
+        }
+
+        private static bool LeerConfirmacion(string mensaje)
+        {
+            string respuesta;
+            while (true)
+            {
+                Console.Write(mensaje);
+                respuesta = Console.ReadLine().ToLower();
+                if (respuesta == "s" || respuesta == "n")
+                    return respuesta == "s";
+                else
+                    Console.WriteLine("Por favor, ingrese 's' para sí o 'n' para no.");
             }
         }
     }
