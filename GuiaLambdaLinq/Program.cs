@@ -49,6 +49,15 @@ namespace GuiaLambdaLinq
                 inventario.ActualizarPrecio(nombreProducto, nuevoPrecio);
             }
 
+            // Eliminar un producto
+            Console.WriteLine("\n¿Desea eliminar un producto? (s/n)");
+            if (Console.ReadLine().ToLower() == "s")
+            {
+                string nombreProducto = LeerNombre();
+                inventario.EliminarProducto(nombreProducto);
+            }
+
+            
         }
     }
 }
