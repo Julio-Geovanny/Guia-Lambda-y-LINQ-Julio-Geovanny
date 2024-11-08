@@ -77,6 +77,18 @@ namespace GuiaLambdaLinq
             }
         }
 
-
+        private static string LeerNombre()
+        {
+            string nombre;
+            while (true)
+            {
+                Console.WriteLine("Nombre: ");
+                nombre = Console.ReadLine();
+                if (!string.IsNullOrWhiteSpace(nombre))
+                    return nombre;
+                else
+                    Console.WriteLine("El nombre no puede estar vacío. Inténtelo nuevamente.");
+            }
+        }
     }
 }
