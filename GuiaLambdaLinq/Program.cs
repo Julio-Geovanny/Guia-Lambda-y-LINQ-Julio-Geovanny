@@ -57,7 +57,26 @@ namespace GuiaLambdaLinq
                 inventario.EliminarProducto(nombreProducto);
             }
 
-            
+            // Contar y agrupar productos
+            inventario.ContarProductosPorRango();
+
+            // Generar reporte resumido del inventario
+            inventario.GenerarReporte();
         }
+
+        private static double LeerPrecio()
+        {
+            double precio;
+            while (true)
+            {
+                Console.WriteLine("Precio: ");
+                if (double.TryParse(Console.ReadLine(), out precio) && precio > 0)
+                    return precio;
+                else
+                    Console.WriteLine("Por favor, ingrese un precio válido (número positivo).");
+            }
+        }
+
+
     }
 }
