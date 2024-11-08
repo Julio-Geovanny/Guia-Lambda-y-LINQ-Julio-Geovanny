@@ -112,11 +112,5 @@ namespace GuiaLambdaLinq
                     Console.WriteLine("Por favor, ingrese 's' para sí o 'n' para no.");
             }
         }
-
-        static void Escribir()
-        {
-            Console.WriteLine("Lucas el pelucas, no tiene pelo, pero tiene corazon");
-
-        }
     }
 }
