@@ -28,6 +28,7 @@ namespace GuiaLambdaLinq
             Console.WriteLine("\nIngrese el precio mínimo para filtrar los productos: ");
             double precioMinimo = LeerPrecio();
 
+
             // filtrar y mostrar producto
             var productosFiltrados = inventario.FiltrarYOrdenarProductos(precioMinimo);
 
@@ -110,6 +111,12 @@ namespace GuiaLambdaLinq
                 else
                     Console.WriteLine("Por favor, ingrese 's' para sí o 'n' para no.");
             }
+        }
+
+        static void Escribir()
+        {
+            Console.WriteLine("Lucas el pelucas, no tiene pelo, pero tiene corazon");
+
         }
     }
 }
