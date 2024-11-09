@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 
 namespace GuiaLambdaLinq
 {
@@ -9,11 +10,65 @@ namespace GuiaLambdaLinq
             Inventario inventario = new Inventario();
             Console.WriteLine("Bienvenidos al sistema de gestión de inventario");
 
-            // ingreso de productos por el usuario
+            // Inicializar productos predeterminados
+            InicializarProductos(inventario);
+
+            // Menú principal
+            bool continuar = true;
+            while (continuar)
+            {
+                Console.WriteLine("\nSeleccione una opción:");
+                Console.WriteLine("1. Agregar nuevos productos");
+                Console.WriteLine("2. Mostrar todos los productos");
+                Console.WriteLine("3. Filtrar productos por precio");
+                Console.WriteLine("4. Actualizar precio de un producto");
+                Console.WriteLine("5. Eliminar un producto");
+                Console.WriteLine("6. Salir");
+
+                string opcion = Console.ReadLine();
+
+                switch (opcion)
+                {
+                    case "1":
+                        AgregarProductos(inventario);
+                        break;
+                    case "2":
+                        MostrarProductos(inventario);
+                        break;
+                    case "3":
+                        FiltrarProductosPorPrecio(inventario);
+                        break;
+                    case "4":
+                        ActualizarPrecioProducto(inventario);
+                        break;
+                    case "5":
+                        EliminarProducto(inventario);
+                        break;
+                    case "6":
+                        continuar = false;
+                        Console.WriteLine("¡Gracias por usar el sistema de gestión de inventario! Hasta luego.");
+                        break;
+                    default:
+                        Console.WriteLine("Opción no válida. Por favor, elija una opción del 1 al 6.");
+                        break;
+                }
+            }
+        }
+
+        private static void InicializarProductos(Inventario inventario)
+        {
+            // Agregar productos predeterminados
+            inventario.AgregarProducto(new Producto("ASUS TERRANEITOR", 2000));
+            inventario.AgregarProducto(new Producto("OnePlus 12", 1000));
+            inventario.AgregarProducto(new Producto("SONY GRAFICS", 7000));
+            inventario.AgregarProducto(new Producto("Tableta RED MAGIC 9s", 900));
+        }
+
+        private static void AgregarProductos(Inventario inventario)
+        {
             Console.WriteLine("¿Cuántos productos desea ingresar?");
             int cantidad = LeerCantidadProductos();
 
-            // se ocupa el ciclo for para pedir exactamente la cantidad de productos que desea ingresar el usuario
             for (int i = 0; i < cantidad; i++)
             {
                 Console.WriteLine($"\nProducto {i + 1}: ");
@@ -23,13 +78,23 @@ namespace GuiaLambdaLinq
                 Producto producto = new Producto(nombre, precio);
                 inventario.AgregarProducto(producto);
             }
+        }
 
-            // ingresar el precio mínimo para el filtro
+        private static void MostrarProductos(Inventario inventario)
+        {
+            var productos = inventario.FiltrarYOrdenarProductos(0); // Muestra todos los productos
+            Console.WriteLine("\nTodos los productos:");
+            foreach (var producto in productos)
+            {
+                Console.WriteLine(producto);
+            }
+        }
+
+        private static void FiltrarProductosPorPrecio(Inventario inventario)
+        {
             Console.WriteLine("\nIngrese el precio mínimo para filtrar los productos: ");
             double precioMinimo = LeerPrecio();
 
-
-            // filtrar y mostrar producto
             var productosFiltrados = inventario.FiltrarYOrdenarProductos(precioMinimo);
 
             Console.WriteLine("\nProductos filtrados y ordenados: ");
@@ -37,27 +102,25 @@ namespace GuiaLambdaLinq
             {
                 Console.WriteLine(producto);
             }
+        }
 
-            // Actualizar precio de un producto
+        private static void ActualizarPrecioProducto(Inventario inventario)
+        {
             if (LeerConfirmacion("\n¿Desea actualizar el precio de un producto? (s/n)"))
             {
                 string nombreProducto = LeerNombre();
                 double nuevoPrecio = LeerPrecio();
                 inventario.ActualizarPrecio(nombreProducto, nuevoPrecio);
             }
+        }
 
-            // Eliminar un producto
+        private static void EliminarProducto(Inventario inventario)
+        {
             if (LeerConfirmacion("\n¿Desea eliminar un producto? (s/n)"))
             {
                 string nombreProducto = LeerNombre();
                 inventario.EliminarProducto(nombreProducto);
             }
-
-            // Contar y agrupar productos
-            inventario.ContarProductosPorRango();
-
-            // Generar reporte resumido del inventario
-            inventario.GenerarReporte();
         }
 
         private static double LeerPrecio()
