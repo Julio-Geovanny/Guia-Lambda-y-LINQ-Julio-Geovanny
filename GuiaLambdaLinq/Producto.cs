@@ -9,14 +9,8 @@
         Precio = precio;
     }
 
-    public void MostrarInformacion()
-    {
-        Console.WriteLine($"Producto: {Nombre}, Precio: {Precio}");
-    }
-
-    // Sobrescribir el método ToString()
     public override string ToString()
     {
-        return $"Producto: {Nombre}, Precio: {Precio}";
+        return $"Nombre: {Nombre}, Precio: {Precio:C}";
     }
 }

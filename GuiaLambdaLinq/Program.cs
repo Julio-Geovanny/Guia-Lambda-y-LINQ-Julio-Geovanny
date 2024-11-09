@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
 
 namespace GuiaLambdaLinq
 {
@@ -45,11 +46,12 @@ namespace GuiaLambdaLinq
                         EliminarProducto(inventario);
                         break;
                     case "6":
+                        GenerarReporte(inventario); // Generar reporte antes de salir
                         continuar = false;
                         Console.WriteLine("¡Gracias por usar el sistema de gestión de inventario! Hasta luego.");
                         break;
                     default:
-                        Console.WriteLine("Opción no válida. Por favor, elija una opción del 1 al 6.");
+                        Console.WriteLine("Opción no válida. Por favor, elija una opción del 1 al 7.");
                         break;
                 }
             }
@@ -82,7 +84,7 @@ namespace GuiaLambdaLinq
 
         private static void MostrarProductos(Inventario inventario)
         {
-            var productos = inventario.FiltrarYOrdenarProductos(0); // Muestra todos los productos
+            var productos = inventario.Productos; // Muestra todos los productos
             Console.WriteLine("\nTodos los productos:");
             foreach (var producto in productos)
             {
@@ -105,26 +107,42 @@ namespace GuiaLambdaLinq
                 Console.WriteLine("Bien, ingrese el precio para el filtrado: ");
                 precioMinimo = LeerPrecio();
 
-                var productosFiltrados = inventario.FiltrarYOrdenarProductos(precioMinimo);
+                var productosFiltrados = inventario.Productos.Where(p => p.Precio < precioMinimo).ToList();
 
                 Console.WriteLine("\nProductos menores al precio ingresado: ");
-                foreach (var producto in productosFiltrados.Where(p => p.Precio < precioMinimo))
+                if (productosFiltrados.Any())
                 {
-                    Console.WriteLine(producto);
+                    foreach (var producto in productosFiltrados)
+                    {
+                        Console.WriteLine(producto);
+                    }
                 }
+                else
+                {
+                    Console.WriteLine("No hay productos menores al precio ingresado.");
+                }
+
             }
             else if (opcionFiltro == "2")
             {
                 Console.WriteLine("Bien, ingrese el precio para el filtrado: ");
                 precioMinimo = LeerPrecio();
 
-                var productosFiltrados = inventario.FiltrarYOrdenarProductos(precioMinimo);
+                var productosFiltrados = inventario.Productos.Where(p => p.Precio > precioMinimo).ToList();
 
                 Console.WriteLine("\nProductos mayores al precio ingresado: ");
-                foreach (var producto in productosFiltrados.Where(p => p.Precio > precioMinimo))
+                if (productosFiltrados.Any())
                 {
-                    Console.WriteLine(producto);
+                    foreach (var producto in productosFiltrados)
+                    {
+                        Console.WriteLine(producto);
+                    }
                 }
+                else
+                {
+                    Console.WriteLine("No hay productos mayores al precio ingresado.");
+                }
+
             }
             else
             {
@@ -149,6 +167,35 @@ namespace GuiaLambdaLinq
                 string nombreProducto = LeerNombre();
                 inventario.EliminarProducto(nombreProducto);
             }
+        }
+
+        private static void GenerarReporte(Inventario inventario)
+        {
+            var totalProductos = inventario.Productos.Count;
+
+            if (totalProductos == 0)
+            {
+                Console.WriteLine("No hay productos en el inventario para generar un reporte.");
+                return;
+            }
+
+            double precioPromedio = inventario.Productos.Average(p => p.Precio);
+
+            var productoMasCaro = inventario.Productos.OrderByDescending(p => p.Precio).FirstOrDefault();
+            var productoMasBarato = inventario.Productos.OrderBy(p => p.Precio).FirstOrDefault();
+
+            // Mostrar reporte
+            Console.WriteLine("\n--- Reporte Resumido del Inventario ---");
+            Console.WriteLine($"Número total de productos: {totalProductos}");
+            Console.WriteLine($"Precio promedio de todos los productos: {precioPromedio:C}");
+
+            if (productoMasCaro != null)
+                Console.WriteLine($"Producto más caro: {productoMasCaro.Nombre}, Precio: {productoMasCaro.Precio:C}");
+
+            if (productoMasBarato != null)
+                Console.WriteLine($"Producto más barato: {productoMasBarato.Nombre}, Precio: {productoMasBarato.Precio:C}");
+
+            Console.WriteLine("--------------------------------------");
         }
 
         private static double LeerPrecio()
@@ -186,7 +233,7 @@ namespace GuiaLambdaLinq
                 if (int.TryParse(Console.ReadLine(), out cantidad) && cantidad > 0)
                     return cantidad;
                 else
-                    Console.WriteLine("Lo siento, Debe ingresar un número entero positivo para la cantidad de productos.");
+                    Console.WriteLine("Lo siento, debe ingresar un número entero positivo para la cantidad de productos.");
             }
         }
 

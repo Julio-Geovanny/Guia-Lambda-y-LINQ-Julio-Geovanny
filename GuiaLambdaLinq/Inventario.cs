@@ -1,88 +1,42 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-
-namespace GuiaLambdaLinq
+﻿public class Inventario
 {
-    public class Inventario
+    public List<Producto> Productos { get; private set; }
+
+    public Inventario()
     {
-        private List<Producto> productos;
+        Productos = new List<Producto>();
+    }
 
-        public Inventario()
+    public void AgregarProducto(Producto producto)
+    {
+        Productos.Add(producto);
+    }
+
+    public void ActualizarPrecio(string nombre, double nuevoPrecio)
+    {
+        var producto = Productos.FirstOrDefault(p => p.Nombre.Equals(nombre, StringComparison.OrdinalIgnoreCase));
+        if (producto != null)
         {
-            productos = new List<Producto>();
+            producto.Precio = nuevoPrecio;
+            Console.WriteLine($"El precio del producto '{nombre}' ha sido actualizado a {nuevoPrecio:C}.");
         }
-        public void AgregarProducto(Producto producto)
+        else
         {
-            productos.Add(producto);
+            Console.WriteLine($"Producto '{nombre}' no encontrado.");
         }
+    }
 
-        public IEnumerable<Producto> FiltrarYOrdenarProductos(double precioMinimo)
+    public void EliminarProducto(string nombre)
+    {
+        var producto = Productos.FirstOrDefault(p => p.Nombre.Equals(nombre, StringComparison.OrdinalIgnoreCase));
+        if (producto != null)
         {
-            //filtrar y ordenar los productos con LINQ y expresiones lambda
-            return productos
-                .Where(p => p.Precio > precioMinimo)    //filtrar productos con precio mayor al minimo especificado
-                .OrderBy(p => p.Precio);    //ordena los productos de menor a mayor precio
+            Productos.Remove(producto);
+            Console.WriteLine($"El producto '{nombre}' ha sido eliminado.");
         }
-
-        public void ActualizarPrecio(string nombre, double nuevoPrecio)
+        else
         {
-            var producto = productos.FirstOrDefault(p => p.Nombre.Equals(nombre, StringComparison.OrdinalIgnoreCase));
-            if (producto != null)
-            {
-                producto.Precio = nuevoPrecio;
-                Console.WriteLine($"El precio del producto '{nombre}' ha sido actualizado a {nuevoPrecio}.");
-            }
-            else
-            {
-                Console.WriteLine($"Producto '{nombre}' no encontrado.");
-            }
-        }
-
-        public void EliminarProducto(string nombre)
-        {
-            var producto = productos.FirstOrDefault(p => p.Nombre.Equals(nombre, StringComparison.OrdinalIgnoreCase));
-            if (producto != null)
-            {
-                productos.Remove(producto);
-                Console.WriteLine($"El producto '{nombre}' ha sido eliminado."); 
-            }
-            else
-            {
-                Console.WriteLine($"Producto '{nombre}' no encontrado.");
-            }
-        }
-
-        public void ContarProductosPorRango()
-        {
-            var conteo = new
-            {
-                MenoresA100 = productos.Count(p => p.Precio < 100),
-                Entre100y500 = productos.Count(p => p.Precio >= 100 && p.Precio <= 500),
-                MayoresA500 = productos.Count(p => p.Precio > 500)
-            };
-
-            Console.WriteLine($"Conteo de productos:\nMenores a 100: {conteo.MenoresA100}\nEntre 100 y 500: {conteo.Entre100y500}\nMayores a 500: {conteo.MayoresA500}");
-        }
-
-        public void GenerarReporte()
-        {
-            int totalProductos = productos.Count;
-            double precioPromedio = totalProductos > 0 ? productos.Average(p => p.Precio) : 0;
-
-            var productoMasCaro = productos.OrderByDescending(p => p.Precio).FirstOrDefault();
-            var productoMasBarato = productos.OrderBy(p => p.Precio).FirstOrDefault();
-
-            Console.WriteLine($"Total de productos: {totalProductos}");
-            Console.WriteLine($"Precio promedio: {precioPromedio}");
-
-            if (productoMasCaro != null)
-                Console.WriteLine($"Producto más caro: {productoMasCaro.Nombre}, Precio: {productoMasCaro.Precio}");
-
-            if (productoMasBarato != null)
-                Console.WriteLine($"Producto más barato: {productoMasBarato.Nombre}, Precio: {productoMasBarato.Precio}");
+            Console.WriteLine($"Producto '{nombre}' no encontrado.");
         }
     }
 }
