@@ -59,8 +59,8 @@ namespace GuiaLambdaLinq
         {
             // Agregar productos predeterminados
             inventario.AgregarProducto(new Producto("ASUS TERRANEITOR", 2000));
-            inventario.AgregarProducto(new Producto("OnePlus 12", 1000));
-            inventario.AgregarProducto(new Producto("SONY GRAFICS", 7000));
+            inventario.AgregarProducto(new Producto("OnePlus 12", 850));
+            inventario.AgregarProducto(new Producto("SONY Vision", 7000));
             inventario.AgregarProducto(new Producto("Tableta RED MAGIC 9s", 900));
         }
 
@@ -92,15 +92,43 @@ namespace GuiaLambdaLinq
 
         private static void FiltrarProductosPorPrecio(Inventario inventario)
         {
-            Console.WriteLine("\nIngrese el precio mínimo para filtrar los productos: ");
-            double precioMinimo = LeerPrecio();
+            Console.WriteLine("\n¿Desea filtrar por:");
+            Console.WriteLine("1. Menores al precio?");
+            Console.WriteLine("2. Mayores al precio?");
 
-            var productosFiltrados = inventario.FiltrarYOrdenarProductos(precioMinimo);
+            string opcionFiltro = Console.ReadLine();
 
-            Console.WriteLine("\nProductos filtrados y ordenados: ");
-            foreach (var producto in productosFiltrados)
+            double precioMinimo;
+
+            if (opcionFiltro == "1")
             {
-                Console.WriteLine(producto);
+                Console.WriteLine("Bien, ingrese el precio para el filtrado: ");
+                precioMinimo = LeerPrecio();
+
+                var productosFiltrados = inventario.FiltrarYOrdenarProductos(precioMinimo);
+
+                Console.WriteLine("\nProductos menores al precio ingresado: ");
+                foreach (var producto in productosFiltrados.Where(p => p.Precio < precioMinimo))
+                {
+                    Console.WriteLine(producto);
+                }
+            }
+            else if (opcionFiltro == "2")
+            {
+                Console.WriteLine("Bien, ingrese el precio para el filtrado: ");
+                precioMinimo = LeerPrecio();
+
+                var productosFiltrados = inventario.FiltrarYOrdenarProductos(precioMinimo);
+
+                Console.WriteLine("\nProductos mayores al precio ingresado: ");
+                foreach (var producto in productosFiltrados.Where(p => p.Precio > precioMinimo))
+                {
+                    Console.WriteLine(producto);
+                }
+            }
+            else
+            {
+                Console.WriteLine("Opción no válida. Regresando al menú principal.");
             }
         }
 
@@ -158,7 +186,7 @@ namespace GuiaLambdaLinq
                 if (int.TryParse(Console.ReadLine(), out cantidad) && cantidad > 0)
                     return cantidad;
                 else
-                    Console.WriteLine("¡Error! Debe ingresar un número entero positivo para la cantidad de productos.");
+                    Console.WriteLine("Lo siento, Debe ingresar un número entero positivo para la cantidad de productos.");
             }
         }
 
